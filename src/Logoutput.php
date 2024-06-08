@@ -6,7 +6,9 @@ ini_set('display_errors', 'On');
 
 use App\Database\DB;
 use App\ManageTracker;
-
+while (ob_get_level() > 0) {
+    ob_end_clean();
+}
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
     DB::init();
@@ -25,11 +27,10 @@ if (isset($_GET['id'])) {
         ob_start();
         $fopen = fopen($filePath, 'r');
         while (($line = fgets($fopen)) !== false) {
-            echo $line;
+            echo $line.'</br>';
             ob_flush();
             flush();
-            sleep(5);
-            usleep(50000);
+            usleep(10000);
         }
     }
     fclose($fopen);

@@ -18,7 +18,7 @@
                         <form id="formdata">
                             <div class="form-group">
                                 <label for=""></label>
-                                <input type="text" class="form-control" name="cmd" id="cmd" value="ls -al">
+                                <input type="text" class="form-control" name="cmd" id="cmd" >
                             </div>
                             <button type="submit" id="sub-btn" class="btn btn-success">Run</button>
                         </form>
@@ -52,23 +52,22 @@
             </div>
         </div>
     </div>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contentViewDetal">
-  Launch static backdrop modal
-</button>
 
     <div class="modal" tabindex="-1" id="contentViewDetal">
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
+                <h5 class="modal-title">Output #ID</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <p>Modal body text goes here.</p>
+            <div class="modal-body" style="background: #000">
+                <code>
+                <p  id="detailContent"></p>
+                </code>
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
             </div>
         </div>
@@ -90,7 +89,10 @@
                     body: JSON.stringify(data)
                 })
                 .then(response => response.json())
-                .then(data => console.log(data))
+                .then(data => {
+                    console.log(data) 
+                    window.location.reload();
+                })
                 .catch(error => console.error(error));
             });
         }
@@ -110,12 +112,12 @@
                         <tr>
                             <td style="text-align:center">${element.id}</td>
                             <td style="text-align:center">John Due</td>
-                            <td style="text-align:center">${element.command_name}</td>
+                            <td style="text-align:center; background: #000; color: #fff">${element.command_name}</td>
                             <td style="text-align:center">${element.started_at}</td>
                             <td style="text-align:center">${element.status}</td>
                             <td style="text-align:center">${element.updated_at}</td>
                             <td style="text-align:center">
-                                <a href="">Output</a>
+                                <a href="javascript:void(0)" onclick="contentViewDetal(${element.id})">Output</a>
                                 <a href="">kill</a>
                             </td>
                         </tr>
@@ -125,7 +127,21 @@
             document.querySelector('#dataRow').innerHTML =rowTxt;
         })
         .catch(err => console.error(err));
-        
+
+
+        function contentViewDetal(id) {
+            fetch(`Logoutput.php?id=${id}`)
+           .then(response => response.text())
+           .then(data => {
+                let myModal = new bootstrap.Modal(document.getElementById('contentViewDetal'), {
+                    keyboard: false
+                })
+                myModal.show();
+                let detail = document.querySelector('#detailContent');
+                detail.innerHTML = data;
+           })
+           .catch(err => console.error(err));
+        }
    </script>
 </body>
 </html>
