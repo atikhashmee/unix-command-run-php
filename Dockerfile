@@ -9,6 +9,9 @@ RUN apt-get update && apt-get install -y curl vim apache2 supervisor  gpg sqlite
 
 COPY conf/supervisor.conf /etc/supervisor/conf.d/supervisord.conf
 
+COPY conf/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 EXPOSE 80 443
 
-CMD apachectl -D FOREGROUND
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]

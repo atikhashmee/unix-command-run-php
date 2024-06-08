@@ -2,13 +2,10 @@
 
 namespace App;
 
-use Throwable;
 use RedBeanPHP\R;
 use Monolog\Level;
 use Monolog\Logger;
-use App\Database\DB;
 use React\Promise\Deferred;
-use App\Encrypter\DataEncryption;
 use Monolog\Handler\StreamHandler;
 
 class PhpUnix 

@@ -130,17 +130,49 @@
 
 
         function contentViewDetal(id) {
-            fetch(`Logoutput.php?id=${id}`)
-           .then(response => response.text())
-           .then(data => {
-                let myModal = new bootstrap.Modal(document.getElementById('contentViewDetal'), {
-                    keyboard: false
-                })
-                myModal.show();
+            let myModal = new bootstrap.Modal(document.getElementById('contentViewDetal'), {
+                keyboard: false
+            })
+            myModal.show();
+            let eventSource;
+
+            if (eventSource) {
+                eventSource.close();
+            }
+
+            eventSource = new EventSource(`LogoutputSSE.php?id=${id}`);
+
+            eventSource.onmessage = (event) => {
+                console.log(event);
+                
                 let detail = document.querySelector('#detailContent');
-                detail.innerHTML = data;
-           })
-           .catch(err => console.error(err));
+                const message = document.createElement('p');
+                message.textContent = event.data;
+                detail.appendChild(message);
+
+                if (event.data === 'stream ended') {
+                    eventSource.close();
+                    console.log('Streaming ended and connection closed');
+                }
+            }
+
+
+            eventSource.onerror = err => {
+                console.log(err, 'error occurred');
+            }
+
+            //normal way of content
+        //     fetch(`Logoutput.php?id=${id}`)
+        //    .then(response => response.text())
+        //    .then(data => {
+        //         let myModal = new bootstrap.Modal(document.getElementById('contentViewDetal'), {
+        //             keyboard: false
+        //         })
+        //         myModal.show();
+        //         let detail = document.querySelector('#detailContent');
+        //         detail.innerHTML = data;
+        //    })
+        //    .catch(err => console.error(err));
         }
    </script>
 </body>
