@@ -130,6 +130,8 @@
 
 
         function contentViewDetal(id) {
+            let detail = document.querySelector('#detailContent');
+            detail.innerHTML = '';
             let myModal = new bootstrap.Modal(document.getElementById('contentViewDetal'), {
                 keyboard: false
             })
@@ -145,7 +147,7 @@
             eventSource.onmessage = (event) => {
                 console.log(event);
                 
-                let detail = document.querySelector('#detailContent');
+                
                 const message = document.createElement('p');
                 message.textContent = event.data;
                 detail.appendChild(message);
