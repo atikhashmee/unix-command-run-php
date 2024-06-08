@@ -113,4 +113,6 @@ class PhpUnix
         return $this->auth;
     }
 
+    
+
 }

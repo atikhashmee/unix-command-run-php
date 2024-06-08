@@ -1,17 +1,22 @@
 <?php
 
-require_once 'vendor/autoload.php';
 
+require_once __DIR__.'/vendor/autoload.php';
+error_reporting(E_ALL);
+ini_set('display_errors', 'On');
 
-use Monolog\Level;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
+use RedBeanPHP\R;
+use App\Database\DB;
 
-// create a log channel
-$log = new Logger('mylogpath');
-// var_dump($log);
-$log->pushHandler(new StreamHandler('logs/log.log', Level::Warning));
+DB::init();
+$trackers = R::getAll('SELECT * FROM trackers WHERE status = "running" AND pid is not null');
 
-// // add records to the log
-$log->warning('Foo');
-$log->error('Bar');
+foreach ($trackers as $tracker) {
+    if (!posix_kill($tracker['pid'], 0)) {
+        $trac = R::load( 'trackers', $tracker['id']);
+        $trac->status = 'finished';
+        $trac->updated_at = time();
+        R::store($trac);
+    }
+}
+
