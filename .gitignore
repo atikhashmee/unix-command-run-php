@@ -1,0 +1,4 @@
+vendor/
+logs
+storage
+app/Database/db.sqlite3

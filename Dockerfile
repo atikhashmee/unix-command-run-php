@@ -7,9 +7,9 @@ RUN apt-get update && apt-get install -y curl vim apache2 supervisor  gpg sqlite
    && apt-get update && apt-get install -y php8.2 php8.2-sqlite3 php8.2-mbstring php8.2-mysql\
     && curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer 
 
-COPY conf/supervisor.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/conf/supervisor.conf /etc/supervisor/conf.d/supervisord.conf
 
-COPY conf/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY docker/conf/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 80 443
